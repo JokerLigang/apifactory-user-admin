@@ -7,10 +7,11 @@ export function infoData() {
   })
 }
 
-export function delData() {
+export function delData(id) {
   return request({
     url: '/user/centerUserWxKey/del',
-    method: 'post'
+    method: 'post',
+    data: { id }
   })
 }
 

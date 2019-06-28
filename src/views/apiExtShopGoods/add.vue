@@ -12,8 +12,8 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="商品分类" prop="categoryId">
-        <el-select style="width: 100%" class="filter-item" v-model="pushData.categoryId"
+      <el-form-item label="商品分类" prop="catagoryId">
+        <el-select style="width: 100%" class="filter-item" v-model="pushData.catagoryId"
                    placeholder="商品分类">
           <el-option
             v-for="item in categoryData"
@@ -69,7 +69,7 @@
       </el-form-item>
       <el-form-item label="商品图片" prop="photos">
         <el-col :span="3" class="orange">
-          <el-upload class="upload-demo" action="https://user.api.it120.cc/fileUpload"
+          <el-upload class="upload-demo" action="https://dev.cnsuning.com/fileUpload"
                      list-type="picture"
                      :data="upLoadData" :headers="fileHeaders" :on-success="uploadSuccess"
                      :file-list="fileList"
@@ -250,7 +250,7 @@
         labelPosition: 'right',
         //表单验证
         rules: {
-          categoryId: [
+          catagoryId: [
             {required: true, message: '请选择商品分类', trigger: 'blur'}
           ], name: [
             {required: true, message: '请输入店铺名称', trigger: 'blur'}
@@ -273,7 +273,7 @@
         pushData: {
           id: undefined,
           shopId: 0,
-          categoryId: undefined,
+          catagoryId: undefined,
           barCode: undefined,
           videoId: undefined,
           name: undefined,
@@ -367,7 +367,7 @@
           } else {
             response.data.forEach((a, index) => {
               if (index === 0) {
-                this.pushData.categoryId = a.id;
+                this.pushData.catagoryId = a.id;
               }
               let v = {}, s = '';
               v.value = a.id;
@@ -452,6 +452,7 @@
           detailsStr.properties = properties;
           if (this.priceExts.length > 0) {
             this.priceExts.forEach((d) => {
+              d.propertyChildIds =  d.propertyId + ":" + d.propertyChildId + ",";
               if (d.propertyChildIds === propertyChildIds || d.propertyChildIds === propertyChildIdc) {
                 detailsStr.originalPrice = d.originalPrice;
                 detailsStr.minPrice = d.price;
@@ -460,7 +461,7 @@
                 detailsStr.stores = d.stores;
               }
             });
-          } else {
+          }else {
             detailsStr.originalPrice = 0;
             detailsStr.minPrice = 0;
             detailsStr.pingtuanPrice = 0;
@@ -516,12 +517,12 @@
                 dateEndStr: res.data.info.dateEndStr,
                 photos: res.data.pics,
                 dateStartStr: new Date(),
-                content: res.data.content.content
+                content: res.data.content.replace(/[\\]/g,'')
               });
 
               this.propertyIds = res.data.info.propertyIds;
               //编辑器
-              this.$refs['editor'].setContent(res.data.content ? res.data.content.content : '');
+              this.$refs['editor'].setContent(res.data.content ? res.data.content : '');
 
               this.properties = res.data.properties;
               this.propertyChildMap = res.data.propertyChildMap;
@@ -578,7 +579,7 @@
             duration: 3 * 1000
           })
         } else {
-          this.pushData.photos.push({id: res.data.name, name: `店铺图片${res.data.type}`, pic: res.data.url});
+          this.pushData.photos.push({id: res.data.name, name: `店铺图片${res.data.type}`, pic: process.env.BASE_API+res.data});
           this.fileList = [];
           this.handleCreate();
         }

@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
-    
+
     <div class="filter-container">
       <el-button class="filter-item" @click="handleCreate" type="success" icon="el-icon-edit">添加</el-button>
     </div>
-    
+
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row empty-text="暂无数据" @selection-change="handleSelectionChange">
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column label="是否包邮" align="center">
@@ -56,7 +56,7 @@ export default {
     this.fetchData()
   },
   mounted() {
-    
+
   },
   methods: {
     handleSelectionChange(val) {
@@ -76,7 +76,7 @@ export default {
       this.$router.push({ path: 'add' })
     },
     handleUpdate(id){
-      this.$router.push({ path: 'add', query:{id:id} })
+      this.$router.push({ path: 'update', query:{id:id} })
     },
     handleCreateSave(){
       this.$refs['addEditPopForm'].validate((valid) => {

@@ -158,22 +158,22 @@ export default {
           res.data.details.forEach(detail => {
             vm.feeTypes[detail.type].isChecked = true
             res.data.exceptions.forEach(exception => {
-              if (detail.id == exception.detailId) {
+              if (detail.id == exception.id) {
                 let tempObj = {name:'默认运费', cityType:0, cityId:0, firstNumber:1, firstAmount:5, addNumber:1, addAmount:5}
                 if (exception.districtId) {
                   tempObj.cityType = 2
-                  tempObj.cityId = exception.districtId
-                  tempObj.name = exception.areaStr
+                  tempObj.cityId = exception.cityId
+                  tempObj.name = exception.name
                 }
                 if (exception.cityId) {
                   tempObj.cityType = 1
                   tempObj.cityId = exception.cityId
-                  tempObj.name = exception.cityStr
+                  tempObj.name = exception.name
                 }
                 if (exception.provinceId) {
                   tempObj.cityType = 0
-                  tempObj.cityId = exception.provinceId
-                  tempObj.name = exception.provinceStr
+                  tempObj.cityId = exception.cityId
+                  tempObj.name = exception.name
                 }
                 tempObj.firstNumber = exception.firstNumber
                 tempObj.firstAmount = exception.firstAmount
@@ -183,7 +183,7 @@ export default {
               }
             })
           })
-          
+
         }
       }).catch(e=>{
         console.error(e);
@@ -233,7 +233,7 @@ export default {
     },
     addCityException(feeType){
       this.curAddCityExceptionIndex = feeType
-      
+
       this.dialogTitle = '请选择配送地'
       this.dialogFormVisible = true
 
@@ -275,7 +275,7 @@ export default {
         return
       }
       this.feeTypes[this.curAddCityExceptionIndex].details.push(addExceptionObj)
-      this.dialogFormVisible = false    
+      this.dialogFormVisible = false
     },
     fetchProvinceList(){
       fetchProvinceList().then(res => {
@@ -316,7 +316,7 @@ export default {
         }
       })
     },
-    
+
   }
 }
 </script>

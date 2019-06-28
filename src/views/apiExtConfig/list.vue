@@ -1,25 +1,25 @@
 <template>
   <div class="app-container">
-    
+
     <div class="filter-container">
       <el-button class="filter-item" @click="handleCreate(0)" type="success">添加文本参数</el-button>
       <el-button class="filter-item" @click="handleCreate(1)" type="success">添加开关参数</el-button>
       <el-button class="filter-item" @click="handleCreate(2)" type="success">添加文件参数</el-button>
     </div>
-    
+
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row empty-text="暂无数据" @selection-change="handleSelectionChange">
-      <el-table-column prop="key" label="编号"></el-table-column>
+      <el-table-column prop="code" label="编号"></el-table-column>
       <el-table-column prop="value" label="参数值"></el-table-column>
       <el-table-column prop="remark" label="备注" show-overflow-tooltip></el-table-column>
-      <el-table-column label="状态" width="100%">
-        <template slot-scope="scope">
-          <el-tag type="success" v-if="scope.row.isPub">公开参数</el-tag>
-          <el-tag type="danger" v-if="!scope.row.isPub">保密参数</el-tag>
-        </template>
-      </el-table-column>
+      <!--<el-table-column label="状态" width="100%">-->
+        <!--<template slot-scope="scope">-->
+          <!--<el-tag type="success" v-if="scope.row.isPub">公开参数</el-tag>-->
+          <!--<el-tag type="danger" v-if="!scope.row.isPub">保密参数</el-tag>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column label="添加/修改" width="160">
         <template slot-scope="scope">
-          {{scope.row.creatAt}}<br>{{scope.row.dateUpdate?scope.row.dateUpdate:'-'}}
+          {{scope.row.createTime}}<br>{{scope.row.updateTime?scope.row.updateTime:'-'}}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="100%">
@@ -41,20 +41,20 @@
 
     <el-dialog :title="pushData.dialogTitle" :visible.sync="pushData.dialogFormVisible" :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form :rules="rules" ref="addEditPopForm" :model="pushData" label-position="left" label-width="100px">
-        
-        <el-form-item v-if="!pushData.id" label="参数编码" prop="key" >
-          <el-input v-model="pushData.key" clearable @keyup.enter.native="handleCreateSave"></el-input>
+
+        <el-form-item v-if="!pushData.id" label="参数编码" prop="code" >
+          <el-input v-model="pushData.code" clearable @keyup.enter.native="handleCreateSave"></el-input>
         </el-form-item>
-        <el-form-item v-if="pushData.dateType == 0" label="参数值" prop="content" >
-          <el-input v-model="pushData.content" type="textarea" :rows="4" clearable @keyup.enter.native="handleCreateSave"></el-input>
+        <el-form-item v-if="pushData.dateType == 0" label="参数值" prop="value" >
+          <el-input v-model="pushData.value" type="textarea" :rows="4" clearable @keyup.enter.native="handleCreateSave"></el-input>
         </el-form-item>
-        <el-form-item v-if="pushData.dateType == 1" label="开关状态" prop="content" >
-          <el-select v-model="pushData.content" placeholder="请选择">
+        <el-form-item v-if="pushData.dateType == 1" label="开关状态" prop="value" >
+          <el-select v-model="pushData.value" placeholder="请选择">
             <el-option label="开启" value="1"></el-option>
             <el-option label="关闭" value="0"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="pushData.dateType == 2" label="上传文件" prop="content" >
+        <el-form-item v-if="pushData.dateType == 2" label="上传文件" prop="value" >
           <el-upload
             class="upload-demo"
             :action="uploadUrl"
@@ -68,12 +68,12 @@
         <el-form-item label="备注" prop="remark" >
           <el-input v-model="pushData.remark" type="textarea" :rows="4" clearable @keyup.enter.native="handleCreateSave"></el-input>
         </el-form-item>
-        <el-form-item label="状态" prop="isPub" >
-          <el-select v-model="pushData.isPub" placeholder="请选择">
-            <el-option label="公开数据" value="true"></el-option>
-            <el-option label="保密数据" value="false"></el-option>
-          </el-select>
-        </el-form-item>
+        <!--<el-form-item label="状态" prop="isPub" >-->
+          <!--<el-select v-model="pushData.isPub" placeholder="请选择">-->
+            <!--<el-option label="公开数据" value="true"></el-option>-->
+            <!--<el-option label="保密数据" value="false"></el-option>-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="pushData.dialogFormVisible = false">取消</el-button>
@@ -108,10 +108,10 @@ export default {
       },
 
       rules: {
-        key: [
+        code: [
           { required: true, message: '不能为空'},
         ],
-        content: [
+        value: [
           { required: true, message: '不能为空'},
         ],
         isPub: [
@@ -141,7 +141,7 @@ export default {
     this.fetchData()
   },
   mounted() {
-    
+
   },
   methods: {
     handleAvatarSuccess(res, file) {
@@ -174,10 +174,10 @@ export default {
     fetchData() {
       this.list = null
       this.listLoading = true
-      fetchDataList(this.page, this.pageSize, this.searchData).then(response => {
+      fetchDataList(this.page-1, this.pageSize, this.searchData).then(response => {
         if (response.code == 0) {
-          this.list = response.data.result
-          this.totalRow = response.data.totalRow
+          this.list = response.data.content,
+          this.totalRow = response.data.totalElements
         }
         this.listLoading = false
       })
@@ -208,7 +208,7 @@ export default {
             duration: 3 * 1000
           })
         } else {
-          this.pushData = Object.assign({}, this.pushDataTmp, res.data, {dateType:'' + res.data.dateType, isPub:'' + res.data.isPub, content:res.data.value})
+          this.pushData = Object.assign({}, this.pushDataTmp, res.data, {dateType:'' + res.data.type, isPub:'' + res.data.isPub, value:res.data.value})
           if (res.data.dateType == 0) {
             this.pushData.dialogTitle = '修改文本参数'
           }

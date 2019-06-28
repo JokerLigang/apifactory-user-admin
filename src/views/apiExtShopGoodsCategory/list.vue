@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
-    
+
     <div class="filter-container">
       <el-button class="filter-item" @click="handleCreate" type="success" icon="el-icon-edit">添加</el-button>
     </div>
-    
+
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row empty-text="暂无数据" @selection-change="handleSelectionChange">
       <el-table-column prop="id" label="ID" align="center" width="100%"></el-table-column>
       <el-table-column label="分类名称">
@@ -27,13 +27,13 @@
       </el-table-column>
       <el-table-column label="状态" width="100%" align="center">
         <template slot-scope="scope">
-          <el-tag type="success" v-if="scope.row.isUse">启用</el-tag>
-          <el-tag type="danger" v-if="!scope.row.isUse">禁用</el-tag>
+          <el-tag type="success" v-if="scope.row.use">启用</el-tag>
+          <el-tag type="danger" v-if="!scope.row.use">禁用</el-tag>
         </template>
 			</el-table-column>
       <el-table-column label="添加/修改时间" width="170px">
         <template slot-scope="scope">
-          {{scope.row.dateAdd}} <br/> {{scope.row.dateUpdate}}
+          {{scope.row.createTime}} <br/> {{scope.row.updateTime}}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="100%">
@@ -74,7 +74,7 @@
         <el-form-item label="编号">
           <el-col :span="4">
             <el-form-item prop="key">
-              <el-input v-model.number="pushData.key" clearable @keyup.enter.native="handleCreateSave"></el-input>
+              <el-input v-model.number="pushData.paixu" clearable @keyup.enter.native="handleCreateSave"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="20">&nbsp;&nbsp;&nbsp;自定义编号，32个字符以内</el-col>
@@ -92,8 +92,8 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="状态" prop="isUse" >
-          <el-select v-model="pushData.isUse" placeholder="请选择">
+        <el-form-item label="状态" prop="use" >
+          <el-select v-model="pushData.use" placeholder="请选择">
             <el-option label="启用" value="true"></el-option>
             <el-option label="禁用" value="false"></el-option>
           </el-select>
@@ -148,6 +148,8 @@ export default {
         key:undefined,
         icon:undefined,
         isUse:undefined,
+        level:undefined,
+        create_time:undefined
       },
 
       multipleSelection: [],
@@ -161,12 +163,12 @@ export default {
     this.fetchData()
   },
   mounted() {
-    
+
   },
   methods: {
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
-      this.pushData.icon = res.data.url;
+      this.pushData.icon = process.env.BASE_API + res.data;
     },
     beforeAvatarUpload(file) {
       const isJPG = (file.type.indexOf('image/') != -1);

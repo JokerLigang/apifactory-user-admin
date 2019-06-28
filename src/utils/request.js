@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
-import { Message, MessageBox } from 'element-ui'
-import { getToken, removeToken } from '@/utils/auth'
+import {Message, MessageBox} from 'element-ui'
+import {getToken, removeToken} from '@/utils/auth'
 
 // 创建axios实例
 const service = axios.create({
@@ -11,7 +11,7 @@ const service = axios.create({
 
 // request拦截器
 service.interceptors.request.use(config => {
-  config.headers['X-Token'] = getToken()
+  config.headers['Authorization'] = 'Bearer ' + getToken()
   config.data = qs.stringify(config.data)
   return config
 }, error => {
@@ -23,9 +23,9 @@ service.interceptors.request.use(config => {
 // respone拦截器
 service.interceptors.response.use(
   response => {
-  /**
-  * code为非20000是抛错 可结合自己业务进行修改
-  */
+    /**
+     * code为非20000是抛错 可结合自己业务进行修改
+     */
     const res = response.data
     if (res.code === 100000 || res.code === 100001) {
       MessageBox.confirm('登录超时，请重新登录', '确定登出', {

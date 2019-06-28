@@ -228,9 +228,16 @@ export const constantRouterMap = [
         meta: {title: '运费模板', icon: 'yunfeimoban'}
       },
       {
-        name: '添加修改运费模板',
+        name: '添加运费模板',
         path: 'apiExtShopFreightTemplate/add',
         component: () => import('@/views/apiExtShopFreightTemplate/add'),
+        meta: {title: '运费模板', icon: 'yunfeimoban'},
+        hidden: true
+      },
+      {
+        name: '修改运费模板',
+        path: 'apiExtShopFreightTemplate/update',
+        component: () => import('@/views/apiExtShopFreightTemplate/update'),
         meta: {title: '运费模板', icon: 'yunfeimoban'},
         hidden: true
       },

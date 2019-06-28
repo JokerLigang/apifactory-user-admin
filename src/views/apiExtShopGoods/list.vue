@@ -8,14 +8,14 @@
       <el-input clearable @keyup.enter.native="fetchData" style="width: 200px;" class="filter-item" placeholder="条码编号"
                 v-model="searchData.barCode">
       </el-input>
-      <el-select clearable style="width: 200px" class="filter-item" v-model="searchData.shopId" placeholder="所属店铺">
-        <el-option
-          v-for="item in shopData"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
+      <!--<el-select clearable style="width: 200px" class="filter-item" v-model="searchData.shopId" placeholder="所属店铺">-->
+        <!--<el-option-->
+          <!--v-for="item in shopData"-->
+          <!--:key="item.value"-->
+          <!--:label="item.label"-->
+          <!--:value="item.value">-->
+        <!--</el-option>-->
+      <!--</el-select>-->
       <el-select clearable style="width: 200px" class="filter-item" v-model="searchData.categoryIdSel"
                  placeholder="商品分类">
         <el-option
@@ -49,7 +49,7 @@
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row
               empty-text="暂无数据" @selection-change="handleSelectionChange">
       <el-table-column prop="id" width="90px" label="商品编号"></el-table-column>
-      <el-table-column prop="shopName" label="店铺"></el-table-column>
+      <!--<el-table-column prop="shopName" label="店铺"></el-table-column>-->
       <el-table-column prop="categoryName" label="分类"></el-table-column>
       <el-table-column prop="name" label="标题"></el-table-column>
       <el-table-column label="图片" min-width="100px">
@@ -274,8 +274,8 @@
         this.listLoading = true;
         fetchDataList(this.searchData).then(response => {
           if (response.code === 0) {
-            this.list = response.data.result;
-            this.totalRow = response.data.totalRow
+            this.list = response.data.content;
+            this.totalRow = response.data.totalElements
           }
           this.listLoading = false
         })
